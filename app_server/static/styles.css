@@ -1,0 +1,256 @@
+:root {
+  --bg: #faf7f2;
+  --surface: #ffffff;
+  --surface-alt: #f4efe6;
+  --ink: #1e1b18;
+  --muted: #5f584f;
+  --accent: #1a56db;
+  --accent-ink: #ffffff;
+  --warm-bg: #f7e8c8;
+  --warm-ink: #6b4800;
+  --border: #e4dccf;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background-color: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+.page-wrap {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding: 28px 20px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.hero-bar,
+.card,
+.poster-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 28px;
+}
+
+.hero-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.kicker {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--warm-ink);
+}
+
+h1 {
+  margin: 6px 0 8px;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  margin: 0 0 8px;
+  font-size: 1.45rem;
+  letter-spacing: -0.01em;
+}
+
+.subtitle,
+.muted {
+  margin: 0;
+  color: var(--muted);
+  max-width: 680px;
+}
+
+.top-tabs,
+.badges,
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.tab-btn,
+.secondary-btn,
+.primary-btn {
+  font: inherit;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: transform 140ms ease, background-color 140ms ease;
+}
+
+.tab-btn,
+.secondary-btn {
+  background: var(--surface-alt);
+  color: var(--ink);
+}
+
+.tab-btn.active,
+.primary-btn {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+
+.primary-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.mode-grid,
+.options-grid,
+.resolutions-grid,
+.meters-grid,
+.two-col,
+.wall-grid {
+  display: grid;
+  gap: 14px;
+  margin-block: 18px;
+}
+
+.mode-grid {
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.options-grid,
+.two-col {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.resolutions-grid,
+.wall-grid {
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+}
+
+.meters-grid {
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.mode-btn,
+.option-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--ink);
+  text-align: start;
+  font: inherit;
+  cursor: pointer;
+}
+
+.mode-btn.selected,
+.option-card.selected {
+  border-color: var(--accent);
+  background: #eef4ff;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.field input {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  font: inherit;
+}
+
+.quiz-top,
+.quiz-footer,
+.wall-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+progress {
+  width: 100%;
+  height: 8px;
+  margin-block: 14px;
+}
+
+.badge-primary,
+.badge-warm {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.badge-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.badge-warm {
+  background: var(--warm-bg);
+  color: var(--warm-ink);
+}
+
+.motto-box {
+  margin: 14px 0;
+  padding: 14px 18px;
+  border-inline-start: 4px solid var(--accent);
+  background: var(--surface-alt);
+  border-radius: 12px;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.sub-card {
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.hitl-modal {
+  max-width: 460px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.status-note {
+  margin-top: 12px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.hidden {
+  display: none;
+}

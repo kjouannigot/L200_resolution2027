@@ -1,0 +1,109 @@
+{
+  "eval_set_id": "resolutions_2027_golden_evalset",
+  "name": "2027 Resolutions Atelier Golden Regression Suite",
+  "description": "Golden dataset verifying unique question dealing, personalized 2027 manifesto synthesis, guided error recovery, and HITL confirmation gating.",
+  "eval_cases": [
+    {
+      "eval_id": "case_01_unique_duo_checkin",
+      "conversation": [
+        {
+          "invocation_id": "inv_01",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Hi! My name is Clara and I am here with my +1 Leo in DUO_PAIR mode. Deal us our 5 unique 2027 questions!"
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "deal_unique_social_quiz_questions",
+                "args": {
+                  "guest_name": "Clara",
+                  "plus_one_name": "Leo",
+                  "guest_mode": "DUO_PAIR"
+                }
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "Welcome Clara & Leo! Here are your 5 freshly dealt fun questions across all 5 dimensions to spark your joint 2027 Resolution Manifesto."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "eval_id": "case_02_manifesto_synthesis_and_hitl_gate",
+      "conversation": [
+        {
+          "invocation_id": "inv_02",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Generate a 2027 manifesto for session quiz-demo01 for Clara & Leo (DUO_PAIR) with twist_retire_habit=retire_tabs, quest_headline=q_passport (custom note: Sunset train across Italy), social_party_move=sm_plusone_vip, rhythm_dream_tuesday=dt_kitchen_disco, energy_mascot=ms_penguin."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "synthesize_personalized_2027_manifesto",
+                "args": {
+                  "session_id": "quiz-demo01",
+                  "guest_name": "Clara",
+                  "plus_one_name": "Leo",
+                  "guest_mode": "DUO_PAIR"
+                }
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "Here is the official 2027 Resolution Manifesto for Clara & Leo featuring your Sunset train across Italy side-quest, your anti-resolution retiring 97 browser tabs, and your December celebration toast!"
+              }
+            ]
+          }
+        },
+        {
+          "invocation_id": "inv_03_hitl_stop",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Post our manifesto to the public Celebration Wall!"
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "publish_manifesto_to_public_celebration_wall",
+                "args": {
+                  "human_confirmed": false
+                }
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "Before I publish Clara & Leo's 2027 Resolution Manifesto to the public Celebration Wall, please confirm explicitly that you approve sharing it publicly!"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

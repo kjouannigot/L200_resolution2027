@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>2027 Resolutions Atelier | Year-End Social Celebration</title>
+    <meta
+      name="description"
+      content="Interactive AI-powered 2027 Resolutions Atelier with unique playful questions per guest, personalized manifestos, and Human-in-the-Loop Celebration Wall sharing."
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="page-wrap">
+      <header class="hero-bar">
+        <div>
+          <div class="kicker">DECEMBER YEAR-END CELEBRATION · HOSTS &amp; +1S</div>
+          <h1 id="main-title">2027 Resolutions Atelier</h1>
+          <p class="subtitle">
+            Every guest gets 5 freshly dealt fun questions—transformed into a
+            compelling, personalized 2027 Resolution Manifesto, Anti-Resolution,
+            and Celebration Toast.
+          </p>
+        </div>
+        <nav class="top-tabs" aria-label="Primary Views">
+          <button id="tab-creator" class="tab-btn active" type="button">
+            Create 2027 Manifesto
+          </button>
+          <button id="tab-wall" class="tab-btn" type="button">
+            Celebration Wall
+          </button>
+        </nav>
+      </header>
+
+      <main id="creator-view">
+        <section id="stage-checkin" class="card">
+          <h2>Who is stepping up to the 2027 Atelier?</h2>
+          <p class="muted">
+            Consecutive guests never receive the same quiz—we deal 5 unique
+            prompts across 5 playful dimensions every round.
+          </p>
+
+          <div class="mode-grid" role="radiogroup" aria-label="Check-in mode">
+            <button
+              type="button"
+              class="mode-btn selected"
+              data-mode="SOLO_HOST"
+              id="mode-solo"
+            >
+              <strong>Solo Host</strong>
+              <span>Personal 2027 manifesto</span>
+            </button>
+            <button
+              type="button"
+              class="mode-btn"
+              data-mode="PLUS_ONE_VIP"
+              id="mode-plusone"
+            >
+              <strong>+1 VIP Guest</strong>
+              <span>Fresh perspective &amp; party magic</span>
+            </button>
+            <button
+              type="button"
+              class="mode-btn"
+              data-mode="DUO_PAIR"
+              id="mode-duo"
+            >
+              <strong>Host &amp; +1 Duo</strong>
+              <span>Shared 2027 pact for two</span>
+            </button>
+          </div>
+
+          <div class="field-row">
+            <label class="field">
+              <span>Your First Name or Nickname</span>
+              <input
+                id="guest-name-input"
+                type="text"
+                placeholder="e.g. Camille"
+                maxlength="80"
+              />
+            </label>
+            <label id="plus-one-field" class="field hidden">
+              <span>+1 Guest Name</span>
+              <input
+                id="plus-one-input"
+                type="text"
+                placeholder="e.g. Julien"
+                maxlength="80"
+              />
+            </label>
+          </div>
+
+          <button id="deal-questions-btn" class="primary-btn" type="button">
+            Deal My 5 Unique Questions →
+          </button>
+        </section>
+
+        <section id="stage-quiz" class="card hidden">
+          <div class="quiz-top">
+            <div class="badges">
+              <span id="step-counter" class="badge-primary">Question 1 of 5</span>
+              <span id="dimension-badge" class="badge-warm">2026 Plot Twist</span>
+            </div>
+            <button id="swap-question-btn" class="secondary-btn" type="button">
+              Swap Question
+            </button>
+          </div>
+
+          <progress id="quiz-progress" value="20" max="100"></progress>
+          <h2 id="question-prompt"></h2>
+          <div id="options-container" class="options-grid"></div>
+
+          <label class="field">
+            <span>Optional Personal Twist (woven directly into your 2027 plan!)</span>
+            <input id="custom-note-input" type="text" maxlength="240" />
+          </label>
+
+          <div class="quiz-footer">
+            <button id="prev-question-btn" class="secondary-btn" type="button">
+              ← Back
+            </button>
+            <button id="next-question-btn" class="primary-btn" type="button" disabled>
+              Next Question →
+            </button>
+          </div>
+        </section>
+
+        <section id="stage-manifesto" class="poster-card hidden">
+          <div class="poster-header">
+            <span class="badge-warm">OFFICIAL 2027 RESOLUTION MANIFESTO</span>
+            <div id="manifesto-guest" class="for-guest"></div>
+            <h2 id="manifesto-persona"></h2>
+            <p id="manifesto-subtitle" class="muted"></p>
+            <blockquote id="manifesto-motto" class="motto-box"></blockquote>
+            <p id="manifesto-forecast" class="forecast-text"></p>
+          </div>
+
+          <div id="meters-container" class="meters-grid"></div>
+          <div id="resolutions-container" class="resolutions-grid"></div>
+
+          <div class="two-col">
+            <div class="sub-card">
+              <div class="kicker">OFFICIALLY RETIRED IN 2027</div>
+              <h3 id="anti-title"></h3>
+              <p id="anti-body" class="muted"></p>
+            </div>
+            <div class="sub-card">
+              <div class="kicker">DECEMBER CELEBRATION TOAST</div>
+              <p id="toast-body" class="toast-text"></p>
+              <p id="charm-body" class="charm-text"></p>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button id="publish-wall-btn" class="primary-btn" type="button">
+              Share to Celebration Wall (Requires Confirmation)
+            </button>
+            <button id="remix-btn" class="secondary-btn" type="button">
+              Remix Persona Spin
+            </button>
+            <button id="next-guest-btn" class="secondary-btn" type="button">
+              Next Guest (Fresh Questions)
+            </button>
+          </div>
+          <p id="status-note" class="status-note hidden"></p>
+        </section>
+      </main>
+
+      <section id="wall-view" class="card hidden">
+        <div class="wall-top">
+          <div>
+            <h2>Live Celebration Resolution Wall</h2>
+            <p class="muted">
+              Published with explicit Human-in-the-Loop guest approval.
+            </p>
+          </div>
+          <div id="wall-stats" class="badge-warm"></div>
+        </div>
+        <div id="wall-grid" class="wall-grid"></div>
+      </section>
+
+      <!-- Human-in-the-Loop Explicit Approval Dialog -->
+      <dialog id="hitl-dialog" class="hitl-modal">
+        <h3>Confirm Public Celebration Wall Post</h3>
+        <p id="hitl-prompt-text"></p>
+        <div class="action-row">
+          <button id="hitl-confirm-btn" class="primary-btn" type="button">
+            Yes, Publish My Manifesto
+          </button>
+          <button id="hitl-cancel-btn" class="secondary-btn" type="button">
+            Keep Private
+          </button>
+        </div>
+      </dialog>
+    </div>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+name: AgentOps CI/CD & Golden Evaluation Suite
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lint-test-and-eval:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout root repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ADK & dev dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Run Ruff static analysis & secret scan
+        run: |
+          ruff check resolutions_agent app_server tests evals
+
+      - name: Run Pytest unit & integration suite
+        run: |
+          pytest tests/ -v
+
+      - name: Run Golden Dataset Evaluation Harness
+        run: |
+          python evals/run_evals.py
+
+      - name: Validate Terraform Infrastructure as Code
+        uses: hashicorp/setup-terraform@v3
+      - name: Terraform Init & Validate
+        run: |
+          terraform -chdir=terraform init -backend=false
+          terraform -chdir=terraform validate
