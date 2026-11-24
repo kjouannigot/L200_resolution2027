@@ -437,6 +437,15 @@ progress {
   display: none;
 }
 
+.join-qr {
+  width: 96px;
+  height: 96px;
+  border-radius: 12px;
+  border: 2px solid var(--g-blue);
+  background: #ffffff;
+  padding: 4px;
+}
+
 @media (max-width: 760px) {
   .mode-grid,
   .options-grid,

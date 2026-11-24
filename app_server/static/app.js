@@ -348,6 +348,11 @@
   }
 
   function connectWallStream() {
+    const qrImg = el('join-qr-img');
+    if (qrImg && !qrImg.src) {
+      qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(window.location.origin)}`;
+      qrImg.onerror = () => qrImg.classList.add('hidden');
+    }
     if (state.wallEventSource) {
       return;
     }
