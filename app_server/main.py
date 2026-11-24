@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import asyncio
+import json
 from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.responses import FileResponse
+from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from google.genai import types
 from pydantic import BaseModel
@@ -45,6 +48,21 @@ fastapi_app = FastAPI(
     ),
 )
 fastapi_app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+
+_wall_subscribers: set[asyncio.Queue[str]] = set()
+
+
+def _broadcast_wall_update() -> None:
+    """Pushes the latest Celebration Wall snapshot to all projected screens."""
+    if not _wall_subscribers:
+        return
+    snapshot = fetch_live_celebration_wall_highlights(limit=15)
+    payload = json.dumps(snapshot)
+    for queue in list(_wall_subscribers):
+        try:
+            queue.put_nowait(payload)
+        except asyncio.QueueFull:
+            pass
 
 
 class AgentChatRequest(BaseModel):
@@ -146,18 +164,43 @@ async def api_generate_manifesto(req: GenerateManifestoApiRequest) -> dict[str, 
 @fastapi_app.post("/api/wall/publish")
 async def api_publish_wall(req: PublishWallApiRequest) -> dict[str, Any]:
     with otel_tracer.start_as_current_span("http.api_publish_wall"):
-        return publish_manifesto_to_public_celebration_wall(
+        result = publish_manifesto_to_public_celebration_wall(
             session_id=req.session_id,
             manifesto_id=req.manifesto_id,
             human_confirmed=req.human_confirmed,
             approval_token=req.approval_token,
         )
+        if result.get("status") == "published":
+            _broadcast_wall_update()
+        return result
 
 
 @fastapi_app.get("/api/wall")
 async def api_list_wall(limit: int = 12) -> dict[str, Any]:
     with otel_tracer.start_as_current_span("http.api_list_wall"):
         return fetch_live_celebration_wall_highlights(limit=limit)
+
+
+@fastapi_app.get("/api/wall/stream")
+async def api_stream_wall() -> StreamingResponse:
+    """Server-Sent Events stream for live projected laptop screens."""
+    queue: asyncio.Queue[str] = asyncio.Queue(maxsize=16)
+    _wall_subscribers.add(queue)
+
+    async def event_generator():
+        try:
+            initial = fetch_live_celebration_wall_highlights(limit=15)
+            yield f"data: {json.dumps(initial)}\n\n"
+            while True:
+                try:
+                    data = await asyncio.wait_for(queue.get(), timeout=20.0)
+                    yield f"data: {data}\n\n"
+                except asyncio.TimeoutError:
+                    yield ": keepalive\n\n"
+        finally:
+            _wall_subscribers.discard(queue)
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 
 @fastapi_app.post("/api/agent/chat")

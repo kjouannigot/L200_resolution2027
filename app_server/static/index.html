@@ -3,56 +3,66 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>2027 Resolutions Atelier | Year-End Social Celebration</title>
+    <title>2027 Resolutions | Social TGIF</title>
     <meta
       name="description"
-      content="Interactive AI-powered 2027 Resolutions Atelier with unique playful questions per guest, personalized manifestos, and Human-in-the-Loop Celebration Wall sharing."
+      content="Answer 5 fun questions on your phone and see your 2027 Resolutions on your phone and the big screen!"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
+    <div class="google-stripe" aria-hidden="true">
+      <span class="stripe-blue"></span>
+      <span class="stripe-red"></span>
+      <span class="stripe-yellow"></span>
+      <span class="stripe-green"></span>
+    </div>
+
     <div class="page-wrap">
       <header class="hero-bar">
-        <div>
-          <div class="kicker">DECEMBER YEAR-END CELEBRATION · HOSTS &amp; +1S</div>
-          <h1 id="main-title">2027 Resolutions Atelier</h1>
+        <div class="hero-copy">
+          <div class="kicker">DECEMBER SOCIAL TGIF · GOOGLERS &amp; +1S</div>
+          <h1 id="main-title">
+            <span class="g-blue">2</span><span class="g-red">0</span
+            ><span class="g-yellow">2</span><span class="g-green">7</span>
+            Resolutions
+          </h1>
           <p class="subtitle">
-            Every guest gets 5 freshly dealt fun questions—transformed into a
-            compelling, personalized 2027 Resolution Manifesto, Anti-Resolution,
-            and Celebration Toast.
+            5 quick, funny questions. Every guest gets new ones! Answer on your
+            phone and see your 2027 plan on your screen and on the wall.
           </p>
         </div>
-        <nav class="top-tabs" aria-label="Primary Views">
+
+        <nav class="top-tabs" aria-label="Views">
           <button id="tab-creator" class="tab-btn active" type="button">
-            Create 2027 Manifesto
+            ✨ Play on Mobile
           </button>
           <button id="tab-wall" class="tab-btn" type="button">
-            Celebration Wall
+            📺 Projector Wall
           </button>
         </nav>
       </header>
 
       <main id="creator-view">
         <section id="stage-checkin" class="card">
-          <h2>Who is stepping up to the 2027 Atelier?</h2>
+          <h2>Who is playing?</h2>
           <p class="muted">
-            Consecutive guests never receive the same quiz—we deal 5 unique
-            prompts across 5 playful dimensions every round.
+            Every player gets 5 fresh questions with 3 fun choices each.
           </p>
 
-          <div class="mode-grid" role="radiogroup" aria-label="Check-in mode">
+          <div class="mode-grid" role="radiogroup" aria-label="Who is playing">
             <button
               type="button"
               class="mode-btn selected"
               data-mode="SOLO_HOST"
               id="mode-solo"
             >
-              <strong>Solo Host</strong>
-              <span>Personal 2027 manifesto</span>
+              <strong>Googler</strong>
+              <span>Just for me</span>
             </button>
             <button
               type="button"
@@ -61,7 +71,7 @@
               id="mode-plusone"
             >
               <strong>+1 VIP Guest</strong>
-              <span>Fresh perspective &amp; party magic</span>
+              <span>Our special guest</span>
             </button>
             <button
               type="button"
@@ -69,14 +79,14 @@
               data-mode="DUO_PAIR"
               id="mode-duo"
             >
-              <strong>Host &amp; +1 Duo</strong>
-              <span>Shared 2027 pact for two</span>
+              <strong>Googler &amp; +1</strong>
+              <span>Together as a duo!</span>
             </button>
           </div>
 
           <div class="field-row">
             <label class="field">
-              <span>Your First Name or Nickname</span>
+              <span>Your Name</span>
               <input
                 id="guest-name-input"
                 type="text"
@@ -95,19 +105,19 @@
             </label>
           </div>
 
-          <button id="deal-questions-btn" class="primary-btn" type="button">
-            Deal My 5 Unique Questions →
+          <button id="deal-questions-btn" class="primary-btn full-mobile" type="button">
+            Start My 5 Questions →
           </button>
         </section>
 
         <section id="stage-quiz" class="card hidden">
           <div class="quiz-top">
             <div class="badges">
-              <span id="step-counter" class="badge-primary">Question 1 of 5</span>
-              <span id="dimension-badge" class="badge-warm">2026 Plot Twist</span>
+              <span id="step-counter" class="badge-blue">1 / 5</span>
+              <span id="dimension-badge" class="badge-yellow">Bye-Bye 2026</span>
             </div>
             <button id="swap-question-btn" class="secondary-btn" type="button">
-              Swap Question
+              🔀 New Question
             </button>
           </div>
 
@@ -116,7 +126,7 @@
           <div id="options-container" class="options-grid"></div>
 
           <label class="field">
-            <span>Optional Personal Twist (woven directly into your 2027 plan!)</span>
+            <span>Add a fun personal note (optional)</span>
             <input id="custom-note-input" type="text" maxlength="240" />
           </label>
 
@@ -125,15 +135,17 @@
               ← Back
             </button>
             <button id="next-question-btn" class="primary-btn" type="button" disabled>
-              Next Question →
+              Next →
             </button>
           </div>
         </section>
 
         <section id="stage-manifesto" class="poster-card hidden">
           <div class="poster-header">
-            <span class="badge-warm">OFFICIAL 2027 RESOLUTION MANIFESTO</span>
-            <div id="manifesto-guest" class="for-guest"></div>
+            <div class="poster-top-tags">
+              <span class="badge-yellow">MY 2027 PLAN</span>
+              <span id="manifesto-guest" class="badge-green"></span>
+            </div>
             <h2 id="manifesto-persona"></h2>
             <p id="manifesto-subtitle" class="muted"></p>
             <blockquote id="manifesto-motto" class="motto-box"></blockquote>
@@ -144,56 +156,65 @@
           <div id="resolutions-container" class="resolutions-grid"></div>
 
           <div class="two-col">
-            <div class="sub-card">
-              <div class="kicker">OFFICIALLY RETIRED IN 2027</div>
+            <div class="sub-card card-red-accent">
+              <div class="kicker k-red">BYE-BYE 2026</div>
               <h3 id="anti-title"></h3>
               <p id="anti-body" class="muted"></p>
             </div>
-            <div class="sub-card">
-              <div class="kicker">DECEMBER CELEBRATION TOAST</div>
+            <div class="sub-card card-yellow-accent">
+              <div class="kicker k-yellow">PARTY TOAST</div>
               <p id="toast-body" class="toast-text"></p>
               <p id="charm-body" class="charm-text"></p>
             </div>
           </div>
 
           <div class="action-row">
-            <button id="publish-wall-btn" class="primary-btn" type="button">
-              Share to Celebration Wall (Requires Confirmation)
+            <button id="publish-wall-btn" class="green-btn full-mobile" type="button">
+              📺 Show on Big Screen!
             </button>
             <button id="remix-btn" class="secondary-btn" type="button">
-              Remix Persona Spin
+              🎲 Remix Vibe
             </button>
             <button id="next-guest-btn" class="secondary-btn" type="button">
-              Next Guest (Fresh Questions)
+              👤 New Player
             </button>
           </div>
           <p id="status-note" class="status-note hidden"></p>
         </section>
       </main>
 
-      <section id="wall-view" class="card hidden">
-        <div class="wall-top">
+      <section id="wall-view" class="wall-shell hidden">
+        <div class="projector-join-bar">
           <div>
-            <h2>Live Celebration Resolution Wall</h2>
+            <div class="live-pill">● LIVE SYNC ON</div>
+            <h2>Big Screen Wall — Answer on Your Phone!</h2>
             <p class="muted">
-              Published with explicit Human-in-the-Loop guest approval.
+              Open <strong id="join-url-label"></strong> on your phone, tap
+              <strong>Show on Big Screen</strong>, and watch it pop up here live.
             </p>
           </div>
-          <div id="wall-stats" class="badge-warm"></div>
+          <div class="projector-actions">
+            <div id="wall-stats" class="badge-blue"></div>
+            <button id="fullscreen-btn" class="secondary-btn" type="button">
+              ⛶ Fullscreen
+            </button>
+          </div>
         </div>
+
+        <div id="spotlight-container"></div>
         <div id="wall-grid" class="wall-grid"></div>
       </section>
 
-      <!-- Human-in-the-Loop Explicit Approval Dialog -->
+      <!-- Human-in-the-Loop Confirmation Dialog -->
       <dialog id="hitl-dialog" class="hitl-modal">
-        <h3>Confirm Public Celebration Wall Post</h3>
-        <p id="hitl-prompt-text"></p>
-        <div class="action-row">
-          <button id="hitl-confirm-btn" class="primary-btn" type="button">
-            Yes, Publish My Manifesto
+        <h3>Put Your 2027 Plan on the Big Screen?</h3>
+        <p id="hitl-prompt-text" class="muted"></p>
+        <div class="action-row modal-actions">
+          <button id="hitl-confirm-btn" class="green-btn" type="button">
+            Yes, Show on Big Screen!
           </button>
           <button id="hitl-cancel-btn" class="secondary-btn" type="button">
-            Keep Private
+            Keep on My Phone Only
           </button>
         </div>
       </dialog>

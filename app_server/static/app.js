@@ -10,6 +10,7 @@
     manifesto: null,
     approvalToken: '',
     remixSeed: 0,
+    wallEventSource: null,
   };
 
   const el = (id) => document.getElementById(id);
@@ -20,7 +21,8 @@
     el('tab-creator').classList.toggle('active', tab === 'creator');
     el('tab-wall').classList.toggle('active', tab === 'wall');
     if (tab === 'wall') {
-      void loadWall();
+      el('join-url-label').textContent = window.location.origin;
+      connectWallStream();
     }
   }
 
@@ -42,8 +44,16 @@
   el('tab-creator').addEventListener('click', () => switchTab('creator'));
   el('tab-wall').addEventListener('click', () => switchTab('wall'));
 
+  el('fullscreen-btn').addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      void document.documentElement.requestFullscreen?.();
+    } else {
+      void document.exitFullscreen?.();
+    }
+  });
+
   async function startQuiz() {
-    const guestName = el('guest-name-input').value.trim() || 'Social Guest';
+    const guestName = el('guest-name-input').value.trim() || 'Guest';
     const plusOneName = el('plus-one-input').value.trim();
     const res = await fetch('/api/quiz/start', {
       method: 'POST',
@@ -76,7 +86,7 @@
 
   function renderQuestion() {
     const q = state.questions[state.currentIndex];
-    el('step-counter').textContent = `Question ${state.currentIndex + 1} of ${state.questions.length}`;
+    el('step-counter').textContent = `${state.currentIndex + 1} / ${state.questions.length}`;
     el('dimension-badge').textContent = q.dimension_label;
     el('quiz-progress').value = Math.round(((state.currentIndex + 1) / state.questions.length) * 100);
     el('question-prompt').textContent = q.prompt;
@@ -106,8 +116,8 @@
     const isLast = state.currentIndex === state.questions.length - 1;
     el('next-question-btn').disabled = !state.answersByQid[q.question_id];
     el('next-question-btn').textContent = isLast
-      ? 'Reveal My 2027 Manifesto ✨'
-      : 'Next Question →';
+      ? 'See My 2027 Plan ✨'
+      : 'Next →';
   }
 
   el('custom-note-input').addEventListener('input', (ev) => {
@@ -152,7 +162,7 @@
   });
 
   async function generateManifesto(seed) {
-    const guestName = el('guest-name-input').value.trim() || 'Social Guest';
+    const guestName = el('guest-name-input').value.trim() || 'Guest';
     const plusOneName = el('plus-one-input').value.trim();
     const answers = state.questions.map((q) => ({
       question_id: q.question_id,
@@ -180,7 +190,7 @@
   }
 
   function renderManifesto(m) {
-    el('manifesto-guest').textContent = `Curated for ${m.guest_header}`;
+    el('manifesto-guest').textContent = m.guest_header;
     el('manifesto-persona').textContent = m.persona_title;
     el('manifesto-subtitle').textContent = m.persona_subtitle;
     el('manifesto-motto').textContent = `“${m.headline_motto}”`;
@@ -214,7 +224,7 @@
       p.textContent = r.personalized_story;
       const step = document.createElement('p');
       step.className = 'muted';
-      step.textContent = `January First Step: ${r.january_first_step}`;
+      step.textContent = `Jan 1st step: ${r.january_first_step}`;
       card.append(cat, h3, p, step);
       resEl.appendChild(card);
     });
@@ -222,11 +232,10 @@
     el('anti-title').textContent = m.anti_resolution_title;
     el('anti-body').textContent = m.anti_resolution_body;
     el('toast-body').textContent = `“${m.celebration_toast}”`;
-    el('charm-body').textContent = `Lucky 2027 Charm: ${m.lucky_2027_charm}`;
+    el('charm-body').textContent = `Lucky Charm: ${m.lucky_2027_charm}`;
     el('status-note').classList.add('hidden');
   }
 
-  // HITL confirmation workflow before publishing publicly
   el('publish-wall-btn').addEventListener('click', async () => {
     const preflight = await fetch('/api/wall/publish', {
       method: 'POST',
@@ -240,7 +249,8 @@
     const gate = await preflight.json();
     if (gate.status === 'requires_human_confirmation') {
       state.approvalToken = gate.approval_token;
-      el('hitl-prompt-text').textContent = gate.confirmation_prompt;
+      el('hitl-prompt-text').textContent =
+        'Show your name, 2027 Persona, and resolutions on the projected wall?';
       el('hitl-dialog').showModal();
     }
   });
@@ -264,7 +274,7 @@
     const out = await res.json();
     if (out.status === 'published') {
       const note = el('status-note');
-      note.textContent = 'Published to the Celebration Wall with your confirmation!';
+      note.textContent = 'Live on the Big Screen now! 🎉';
       note.classList.remove('hidden');
     }
   });
@@ -279,20 +289,57 @@
     showStage('checkin');
   });
 
-  async function loadWall() {
-    const res = await fetch('/api/wall');
-    const data = await res.json();
-    el('wall-stats').textContent = `${data.total_published_count} Manifestos · Top Persona: ${data.top_persona_tonight}`;
+  function renderWallData(data) {
+    el('wall-stats').textContent = `${data.total_published_count} Players · Top: ${data.top_persona_tonight}`;
+
+    const spotlight = el('spotlight-container');
+    spotlight.replaceChildren();
+    const items = data.recent_manifestos || [];
+    if (items.length > 0) {
+      const latest = items[0];
+      const spotCard = document.createElement('div');
+      spotCard.className = 'spotlight-card';
+
+      const tag = document.createElement('span');
+      tag.className = 'badge-yellow';
+      tag.textContent = '✨ JUST LANDED ON THE BIG SCREEN';
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'spotlight-name';
+      nameEl.textContent = latest.guest_header;
+
+      const personaEl = document.createElement('div');
+      personaEl.className = 'spotlight-persona';
+      personaEl.textContent = `${latest.persona_title} — “${latest.headline_motto}”`;
+
+      const resGrid = document.createElement('div');
+      resGrid.className = 'resolutions-grid';
+      (latest.resolutions || []).forEach((r) => {
+        const box = document.createElement('div');
+        box.className = 'sub-card';
+        const h3 = document.createElement('h3');
+        h3.textContent = r.title;
+        const p = document.createElement('p');
+        p.className = 'muted';
+        p.textContent = r.personalized_story;
+        box.append(h3, p);
+        resGrid.appendChild(box);
+      });
+
+      spotCard.append(tag, nameEl, personaEl, resGrid);
+      spotlight.appendChild(spotCard);
+    }
+
     const grid = el('wall-grid');
     grid.replaceChildren();
-    data.recent_manifestos.forEach((item) => {
+    items.slice(1).forEach((item) => {
       const card = document.createElement('article');
       card.className = 'sub-card';
-      const h3 = document.createElement('h3');
-      h3.textContent = item.guest_header;
       const persona = document.createElement('div');
       persona.className = 'kicker';
       persona.textContent = item.persona_title;
+      const h3 = document.createElement('h3');
+      h3.textContent = item.guest_header;
       const motto = document.createElement('p');
       motto.textContent = `“${item.headline_motto}”`;
       card.append(persona, h3, motto);
@@ -300,7 +347,27 @@
     });
   }
 
+  function connectWallStream() {
+    if (state.wallEventSource) {
+      return;
+    }
+    const source = new EventSource('/api/wall/stream');
+    source.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        renderWallData(data);
+      } catch (_) {
+        // Ignore keepalive or malformed frames
+      }
+    };
+    state.wallEventSource = source;
+  }
+
   el('deal-questions-btn').addEventListener('click', () => {
     void startQuiz();
   });
+
+  if (new URLSearchParams(window.location.search).get('view') === 'projector') {
+    switchTab('wall');
+  }
 })();

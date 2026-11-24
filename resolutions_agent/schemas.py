@@ -108,7 +108,7 @@ class QuizQuestionSchema(BaseModel):
     custom_placeholder: str = Field(
         ..., description="Placeholder encouraging an optional personal write-in twist."
     )
-    options: list[QuizChoiceSchema] = Field(..., min_length=2, max_length=6)
+    options: list[QuizChoiceSchema] = Field(..., min_length=3, max_length=3)
 
 
 class DealUniqueQuestionsOutput(BaseModel):

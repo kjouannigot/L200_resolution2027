@@ -362,52 +362,52 @@ def synthesize_personalized_2027_manifesto(
     ).digest()
     motto = archetype.mottos[(digest[0] + validated.remix_seed) % len(archetype.mottos)]
 
-    verb_step = "are stepping" if is_duo else "is stepping"
+    verb_step = "are jumping" if is_duo else "is jumping"
     forecast = (
-        f"{guest_header} {verb_step} into 2027 {twist_opt.forecast_hook}—now "
-        f"{quest_opt.forecast_hook} while {rhythm_opt.forecast_hook}. Add a signature gift "
-        f"for {social_opt.forecast_hook}, and 2027 launches {energy_opt.forecast_hook}!"
+        f"{guest_header} {verb_step} into 2027 {twist_opt.forecast_hook}—ready for "
+        f"{quest_opt.forecast_hook} and {rhythm_opt.forecast_hook}. Add a gift for "
+        f"{social_opt.forecast_hook}, and 2027 kicks off {energy_opt.forecast_hook}!"
     )
     if energy_note:
-        forecast += f' Personal 2027 wildcard locked in: "{energy_note}"!'
+        forecast += f' Your bonus 2027 twist: "{energy_note}"!'
 
     def _with_twist(text: str, note: str, label: str) -> str:
         return f'{text} {label}: "{note}"!' if note else text
 
     pillars = [
         ResolutionPillarSchema(
-            category="01 · Bold 2027 Side-Quest",
+            category="01 · Big 2027 Adventure",
             title=quest_opt.resolution_title,
             personalized_story=_with_twist(
-                f"Crafted for {guest_header}: {quest_opt.resolution_pitch}",
+                f"Made for {guest_header}: {quest_opt.resolution_pitch}",
                 quest_note,
-                "Personal spotlight",
+                "Your twist",
             ),
             january_first_step=quest_opt.january_step,
             victory_signal=quest_opt.victory_signal,
         ),
         ResolutionPillarSchema(
             category=(
-                "02 · Shared Duo & Celebration Pact"
+                "02 · Duo & Party Pact"
                 if is_duo
-                else "02 · Social & Connection Pact"
+                else "02 · Friends & Party Pact"
             ),
             title=social_opt.resolution_title,
             personalized_story=_with_twist(
                 f"For {guest_header}: {social_opt.resolution_pitch}",
                 social_note,
-                "Signature party twist",
+                "Your party twist",
             ),
             january_first_step=social_opt.january_step,
             victory_signal=social_opt.victory_signal,
         ),
         ResolutionPillarSchema(
-            category="03 · Everyday Joy Upgrade",
+            category="03 · Daily Joy Boost",
             title=rhythm_opt.resolution_title,
             personalized_story=_with_twist(
-                f"{rhythm_opt.resolution_pitch} Pair it with '{energy_opt.resolution_title}' all year.",
+                f"{rhythm_opt.resolution_pitch} Plus '{energy_opt.resolution_title}' all year!",
                 rhythm_note,
-                "Custom rhythm upgrade",
+                "Your daily twist",
             ),
             january_first_step=rhythm_opt.january_step,
             victory_signal=rhythm_opt.victory_signal,
@@ -416,10 +416,10 @@ def synthesize_personalized_2027_manifesto(
 
     max_score = max(trait_scores.values(), default=1)
     meter_defs = (
-        ("boldness", "Bold Moonshot Nerve"),
-        ("spontaneity", "Spontaneous Plot-Twist"),
-        ("cozy_joy", "Five-Star Cozy Joy"),
-        ("social_spark", "Celebration Magnetism"),
+        ("boldness", "Bold Courage"),
+        ("spontaneity", "Fun Surprises"),
+        ("cozy_joy", "Cozy Vibes"),
+        ("social_spark", "Party Spark"),
     )
     meters = [
         EnergyMeterSchema(
