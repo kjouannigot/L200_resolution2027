@@ -301,7 +301,7 @@
       spotCard.className = 'spotlight-card';
 
       const tag = document.createElement('span');
-      tag.className = 'badge-yellow';
+      tag.className = 'badge-orange';
       tag.textContent = '✨ JUST LANDED ON THE BIG SCREEN';
 
       const nameEl = document.createElement('div');
